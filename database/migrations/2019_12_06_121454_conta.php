@@ -13,6 +13,8 @@ class Conta extends Migration
             function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('descricao');
+                $table->integer('banco_id');
+                $table->integer('agencia');
                 $table->timestamps();
             }
         );

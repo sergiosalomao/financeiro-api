@@ -17,9 +17,7 @@ class FluxoController extends Controller
         }
         $dados = $dados->get();
 
-        if ($dados->count() == 0) {
-            return response('Nenhum dado encontrado.', 200);
-        }
+        
         return response()->json($dados, 200);
     }
 

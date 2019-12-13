@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\ContaRequest;
 use App\Conta;
+use Illuminate\Support\Facades\DB;
 
 class ContaController extends Controller
 {
@@ -15,8 +16,16 @@ class ContaController extends Controller
         if ($request->filled('descricao')) {
             $dados->where('descricao', 'like', '%' . $request->descricao . '%');
         }
-
-        $dados = $dados->get();
+        $dados = $conta->newQuery();
+        if ($request->filled('banco_id')) {
+            $dados->where('banco_id', 'like', '%' . $request->banco_id . '%');
+        }
+       
+        // $dados = DB::table('contas')
+        // ->join('bancos', 'bancos.id', '=', 'contas.banco_id')
+        // ->get();
+        $dados = $dados->with('banco')->get();
+        
 
         if ($dados->count() == 0) {
             return response('Nenhum dado encontrado.', 200);

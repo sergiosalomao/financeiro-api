@@ -19,9 +19,7 @@ class TituloController extends Controller
         if ($request->filled('fluxo')) $dados->where('fluxo', $request->fluxo);
         $dados = $dados->get();
 
-        if ($dados->count() == 0) {
-            return response('Nenhum dado encontrado.', 200);
-        }
+        
         return response()->json($dados, 200);
     }
 

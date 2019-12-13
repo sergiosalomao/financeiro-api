@@ -23,9 +23,6 @@ class LancamentoController extends Controller
 
         $dados = $dados->with(['conta', 'fluxo','titulo'])->get();
 
-        if ($dados->count() == 0) {
-            return response('Nenhum dado encontrado.', 200);
-        }
         return response()->json($dados, 200);
     }
 

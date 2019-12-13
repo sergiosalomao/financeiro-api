@@ -18,7 +18,8 @@ class ContaRequest extends FormRequest
     public function rules()
     {
         return [
-            'descricao' => 'required|unique:contas'
+            'descricao' => 'required|unique:contas',
+            'banco_id' => 'required'
         ];
     }
 
@@ -26,7 +27,8 @@ class ContaRequest extends FormRequest
     {
         return [
             'descricao.required' => 'Descricao é obrigatoria',
-            'descricao.unique' => 'conta ja existe'
+            'descricao.unique' => 'conta ja existe',
+            'banco_id.required' => 'informa o banco'
         ];
     }
 
