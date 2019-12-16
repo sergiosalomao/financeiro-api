@@ -3,43 +3,38 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\ContaRequest;
-use App\Conta;
-use Illuminate\Support\Facades\DB;
+use App\Http\Requests\BancoRequest;
+use App\Banco;
 
-class ContaController extends Controller
+class BancoController extends Controller
 {
 
-    public function index(Request $request, Conta $conta)
+    public function index(Request $request, Banco $banco)
     {
-        $dados = $conta->newQuery();
+        $dados = $banco->newQuery();
         if ($request->filled('descricao')) {
             $dados->where('descricao', 'like', '%' . $request->descricao . '%');
         }
-        $dados = $conta->newQuery();
-        if ($request->filled('banco_id')) {
-            $dados->where('banco_id', 'like', '%' . $request->banco_id . '%');
+        if ($request->filled('numero')) {
+            $dados->where('numero', 'like', '%' . $request->numero . '%');
         }
-       
-        // $dados = DB::table('contas')
-        // ->join('bancos', 'bancos.id', '=', 'contas.banco_id')
-        // ->get();
-        $dados = $dados->with('banco')->get();
+
+        if ($request->filled('agencia')) {
+            $dados->where('agencia', 'like', '%' . $request->agencia . '%');
+        }
+
+        $dados = $dados->with(['contas'])->get();
+        //$dados = $dados->get();
         
-
-        // if ($dados->count() == 0) {
-        //     return response('Nenhum dado encontrado.', 200);
-        // }
-
         return response()->json($dados, 200);
     }
 
 
-    public function store(ContaRequest $request)
+    public function store(BancoRequest $request)
     {
         $param = $request->all();
         try {
-            $dados = Conta::create($param);
+            $dados = Banco::create($param);
         } catch (Exception $e) {
             return response('Erro:' . $e->getMessage(), 500);
         }
@@ -50,7 +45,7 @@ class ContaController extends Controller
     public function show($id)
     {
         try {
-            $dados = Conta::find($id);
+            $dados = Banco::find($id);
             if (empty($dados)) {
                 return response('registro nao encontrado.', 200);
             }
@@ -66,7 +61,7 @@ class ContaController extends Controller
     {
         $param = $request->all();
         try {
-            $dados = Conta::findOrFail($id);
+            $dados = Banco::findOrFail($id);
             $dados->update($param);
         } catch (Exception $e) {
             return response('Erro:' . $e->getMessage(), 500);
@@ -78,7 +73,7 @@ class ContaController extends Controller
     public function destroy($id)
     {
         try {
-            $dados = Conta::find($id);
+            $dados = Banco::find($id);
             if (empty($dados)) {
                 return response('registro nao encontrado.', 200);
             }

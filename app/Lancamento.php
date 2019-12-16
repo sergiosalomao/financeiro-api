@@ -8,7 +8,7 @@ class Lancamento extends Model
 {
     protected $hidden = ['created_at', 'updated_at'];
     
-    protected $fillable = ['tipo', 'conta_id', 'fluxo_id', 'valor', 'status', 'descricao', 'titulo_id'];
+    protected $fillable = ['tipo', 'conta_id', 'fluxo_id', 'valor', 'descricao', 'titulo_id','data_lancamento'];
 
     public function conta()
     {

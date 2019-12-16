@@ -13,6 +13,7 @@ class Lancamento extends Migration
             'lancamentos',
             function (Blueprint $table) {
                 $table->bigIncrements('id');
+                $table->date('data_lancamento');
                 $table->enum('tipo', ['Credito', 'Debito']);
                 $table->unsignedBigInteger('conta_id');
                 $table->foreign('conta_id')->references('id')->on('contas');               

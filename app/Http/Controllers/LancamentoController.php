@@ -20,9 +20,23 @@ class LancamentoController extends Controller
         if ($request->filled('valor'))     $dados->where('valor', 'like', '%' . $request->valor . '%');
         if ($request->filled('descricao')) $dados->where('descricao', 'like', '%' . $request->descricao . '%');
         if ($request->filled('titulo'))    $dados->where('titulo_id', 'like', '%' . $request->titulo . '%');
+        if ($request->filled('datainicio','datafinal'))   
+         $dados->whereBetween('data_lancamento', [$request->datainicio, $request->datafinal])->get();
 
-        $dados = $dados->with(['conta', 'fluxo','titulo'])->get();
+        $dados = $dados->with(['conta', 'fluxo','titulo'])->orderBy('data_lancamento','desc')->get();
 
+        // $total = 0;
+        // foreach($dados as $dado){
+        //     if($dado->tipo =='Debito')
+        //         $total -= $dado->valor;
+        //         else
+        //         if($dado->tipo =='Credito'){
+        //             $total += $dado->valor;
+        //         }
+        //     }
+
+        // $dados['total'] = $total;
+        
         return response()->json($dados, 200);
     }
 

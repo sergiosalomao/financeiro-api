@@ -15,6 +15,9 @@ class FluxoController extends Controller
         if ($request->filled('descricao')) {
             $dados->where('descricao', 'like', '%' . $request->descricao . '%');
         }
+        if ($request->filled('tipo')) {
+            $dados->where('tipo', 'like', '%' . $request->tipo . '%');
+        }
         $dados = $dados->get();
 
         
