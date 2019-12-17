@@ -8,7 +8,7 @@ class Titulo extends Model
 {
     protected $hidden = ['created_at', 'updated_at'];
     protected $fillable = [
-        'cedente',
+        'cedente_id',
         'vencimento',
         'sacado',
         'conta_id',
@@ -22,4 +22,20 @@ class Titulo extends Model
     {
         return $this->hasMany('App\Lancamento');
     }
+
+    public function conta()
+    {
+        return $this->belongsTo('App\Conta');
+    }
+    
+    public function fluxo()
+    {
+        return $this->belongsTo('App\Fluxo');
+    }
+
+    public function cedente()
+    {
+        return $this->belongsTo('App\Cedente');
+    }
+
 }

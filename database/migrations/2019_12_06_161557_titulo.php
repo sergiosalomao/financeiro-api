@@ -17,7 +17,7 @@ class Titulo extends Migration
             'titulos',
             function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->string('cedente');
+                $table->string('cedente_id');
                 $table->date('vencimento');
                 $table->string('sacado');
                 $table->unsignedBigInteger('conta_id');

@@ -22,6 +22,7 @@ Route::apiResource('bancos', 'BancoController');
 Route::apiResource('fluxos', 'FluxoController');
 Route::apiResource('lancamentos', 'LancamentoController');
 Route::apiResource('titulos', 'TituloController');
+Route::apiResource('cedentes', 'CedenteController');
 
 
 Route::post('login', 'AuthController@login');

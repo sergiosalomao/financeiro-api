@@ -13,12 +13,16 @@ class TituloController extends Controller
     public function index(Request $request, Titulo $titulo)
     {
         $dados = $titulo->newQuery();
-        if ($request->filled('vencimento')) $dados->where('vencimento', $request->vencimento);
-        if ($request->filled('tipo')) $dados->where('tipo', $request->tipo);
-        if ($request->filled('status')) $dados->where('status', $request->status);
-        if ($request->filled('fluxo')) $dados->where('fluxo', $request->fluxo);
-        $dados = $dados->get();
+        
+        if ($request->filled('conta_id'))  $dados->where('conta_id', 'like', '%' . $request->conta_id . '%');
+        if ($request->filled('fluxo_id'))  $dados->where('fluxo_id', 'like', '%' . $request->fluxo_id . '%');
+        if ($request->filled('cedente_id'))  $dados->where('cedente_id', 'like', '%' . $request->cedente_id . '%');
+        if ($request->filled('valor'))     $dados->where('valor', 'like', '%' . $request->valor . '%');
+        
+        if ($request->filled('datainicio','datafinal'))   
+         $dados->whereBetween('vencimento', [$request->datainicio, $request->datafinal])->get();
 
+        $dados = $dados->with(['conta', 'fluxo','cedente'])->orderBy('vencimento','desc')->get();
         
         return response()->json($dados, 200);
     }

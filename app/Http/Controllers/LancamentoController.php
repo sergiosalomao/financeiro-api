@@ -25,17 +25,7 @@ class LancamentoController extends Controller
 
         $dados = $dados->with(['conta', 'fluxo','titulo'])->orderBy('data_lancamento','desc')->get();
 
-        // $total = 0;
-        // foreach($dados as $dado){
-        //     if($dado->tipo =='Debito')
-        //         $total -= $dado->valor;
-        //         else
-        //         if($dado->tipo =='Credito'){
-        //             $total += $dado->valor;
-        //         }
-        //     }
-
-        // $dados['total'] = $total;
+       
         
         return response()->json($dados, 200);
     }

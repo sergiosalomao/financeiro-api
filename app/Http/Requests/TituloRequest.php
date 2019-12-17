@@ -18,7 +18,7 @@ class TituloRequest extends FormRequest
     public function rules()
     {
         return [
-            'cedente' => 'required',
+            'cedente_id' => 'required',
             'conta_id' => 'required',
             'fluxo_id' => 'required',
             'valor' => 'required',
