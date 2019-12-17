@@ -24,7 +24,6 @@ class TituloRequest extends FormRequest
             'valor' => 'required',
             'sacado' => 'max:100',
             'tipo' => 'required',
-            'status' => 'required',
             'vencimento' => 'required',
         ];
     }

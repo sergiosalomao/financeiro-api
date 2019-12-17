@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\TituloRequest;
 use App\Titulo;
-
+use App\Lancamento;
 
 class TituloController extends Controller
 {
@@ -14,6 +14,7 @@ class TituloController extends Controller
     {
         $dados = $titulo->newQuery();
         
+        if ($request->filled('status'))  $dados->where('status', 'like', '%' . $request->status . '%');
         if ($request->filled('conta_id'))  $dados->where('conta_id', 'like', '%' . $request->conta_id . '%');
         if ($request->filled('fluxo_id'))  $dados->where('fluxo_id', 'like', '%' . $request->fluxo_id . '%');
         if ($request->filled('cedente_id'))  $dados->where('cedente_id', 'like', '%' . $request->cedente_id . '%');
@@ -60,10 +61,40 @@ class TituloController extends Controller
         try {
             $dados = Titulo::findOrFail($id);
             $dados->update($param);
+
+           
+                $this->criarLancamento($dados);
+           
         } catch (Exception $e) {
             return response('Erro:' . $e->getMessage(), 500);
         }
         return response()->json(['Dados atualizados', 'DADOS' => $dados], 200);
+    }
+
+    private function apagarLancamento($dados)
+    {
+        $dados = Lancamento::find($dados);
+        $dados->delete();     
+    }
+
+    private function criarLancamento($dados)
+    {
+        try {
+            
+            $lanc = new Lancamento;
+            
+            $lanc->data_lancamento = date("d/m/Y");
+            $lanc->tipo = $dados->tipo;
+            $lanc->conta_id = $dados->conta_id;
+            $lanc->fluxo_id = $dados->fluxo_id;
+            $lanc->titulo_id = $dados->id;
+            $lanc->valor = $dados->valor;
+            $lanc->descricao = "Baixa de boleto";
+            $lanc->save();
+            return response()->json('Dados salvos', 200);
+        } catch (Exception $e) {
+            return response('Erro:' . $e->getMessage(), 500);
+        }
     }
 
 

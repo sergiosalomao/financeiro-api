@@ -26,7 +26,7 @@ class Titulo extends Migration
                 $table->foreign('fluxo_id')->references('id')->on('fluxos');
                 $table->double('valor', 8, 2);
                 $table->enum('tipo', ['Credito', 'Debito']);
-                $table->enum('status', ['Pago', 'Aberto']);
+                $table->enum('status', ['Pago', 'Aberto'])->default('Aberto');
                 $table->timestamps();
             }
         );
