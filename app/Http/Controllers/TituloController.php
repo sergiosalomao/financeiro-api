@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Requests\TituloRequest;
 use App\Titulo;
 use App\Lancamento;
+use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 
 class TituloController extends Controller
 {
 
     public function index(Request $request, Titulo $titulo)
-    {
+    {      
+      
         $dados = $titulo->newQuery();
         
         if ($request->filled('status'))  $dados->where('status', 'like', '%' . $request->status . '%');
@@ -21,9 +23,9 @@ class TituloController extends Controller
         if ($request->filled('valor'))     $dados->where('valor', 'like', '%' . $request->valor . '%');
         
         if ($request->filled('datainicio','datafinal'))   
-         $dados->whereBetween('vencimento', [$request->datainicio, $request->datafinal])->get();
+         $dados->whereBetween('vencimento', [implode('-', array_reverse(explode('/', $request->datainicio))), implode('-', array_reverse(explode('/', $request->datafinal)))])->get();
 
-        $dados = $dados->with(['conta', 'fluxo','cedente'])->orderBy('vencimento','desc')->get();
+        $dados = $dados->with(['conta', 'fluxo','cedente'])->orderBy('vencimento','asc')->get();
         
         return response()->json($dados, 200);
     }
@@ -44,7 +46,7 @@ class TituloController extends Controller
     public function show($id)
     {
         try {
-            $dados = Titulo::find($id);
+            $dados = Titulo::with(['conta', 'fluxo','cedente'])->find($id);
             if (empty($dados)) {
                 return response('registro nao encontrado.', 200);
             }
@@ -62,8 +64,12 @@ class TituloController extends Controller
             $dados = Titulo::findOrFail($id);
             $dados->update($param);
 
-           
-                $this->criarLancamento($dados);
+            
+            if ($dados->status == 'Pago')
+            $this->criarLancamento($dados);
+            else if ($dados->status == 'Aberto')
+            $this->apagarLancamento($id);
+
            
         } catch (Exception $e) {
             return response('Erro:' . $e->getMessage(), 500);
@@ -71,9 +77,9 @@ class TituloController extends Controller
         return response()->json(['Dados atualizados', 'DADOS' => $dados], 200);
     }
 
-    private function apagarLancamento($dados)
+    private function apagarLancamento($tituloId)
     {
-        $dados = Lancamento::find($dados);
+        $dados = Lancamento::where('titulo_id',$tituloId);
         $dados->delete();     
     }
 
