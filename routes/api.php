@@ -27,3 +27,5 @@ Route::apiResource('cedentes', 'CedenteController');
 
 Route::post('login', 'AuthController@login');
 Route::post('register', 'AuthController@register');
+
+
