@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => ['cors']], function () {
     Route::apiResource('contas', 'ContaController');
+    Route::post('login', 'AuthController@login');
 });
 
 Route::apiResource('bancos', 'BancoController');
@@ -25,5 +26,7 @@ Route::apiResource('titulos', 'TituloController');
 Route::apiResource('cedentes', 'CedenteController');
 
 
-Route::post('login', 'AuthController@login');
+
 Route::post('register', 'AuthController@register');
+
+
