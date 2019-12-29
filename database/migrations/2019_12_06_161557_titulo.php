@@ -19,6 +19,7 @@ class Titulo extends Migration
                 $table->bigIncrements('id');
                 $table->string('cedente_id');
                 $table->date('vencimento');
+                $table->date('data_pagamento');
                 $table->string('sacado');
                 $table->unsignedBigInteger('conta_id');
                 $table->foreign('conta_id')->references('id')->on('contas');

@@ -19,7 +19,8 @@ class Titulo extends Model
         'fluxo_id',
         'valor',
         'tipo',
-        'status'
+        'status',
+        'data_pagamento'
     ];
 
     public function lancamentos()
@@ -44,7 +45,10 @@ class Titulo extends Model
 
     public function getDiasAtrasoAttribute()
     {
+        if ($this->status == 'Aberto')
         $diferenca = strtotime($this->vencimento) - strtotime(date('Y-m-d'));
+       if ($this->status == 'Pago')
+        $diferenca = strtotime($this->vencimento) - strtotime($this->data_pagamento);
         return $this->attributes['diasatraso'] = floor($diferenca / (60 * 60 * 24));
     }
 
