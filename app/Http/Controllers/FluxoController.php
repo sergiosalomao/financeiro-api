@@ -18,7 +18,7 @@ class FluxoController extends Controller
         if ($request->filled('tipo')) {
             $dados->where('tipo', 'like', '%' . $request->tipo . '%');
         }
-        $dados = $dados->get();
+        $dados = $dados->orderBy('tipo')->get();
 
         
         return response()->json($dados, 200);
