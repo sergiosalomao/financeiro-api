@@ -87,7 +87,7 @@ class TituloController extends Controller
     {
         try {
             $lanc = new Lancamento;
-            $lanc->data_lancamento = date("d/m/Y");
+            $lanc->data_lancamento = date("Y/m/d");
             $lanc->tipo = $dados->tipo;
             $lanc->conta_id = $dados->conta_id;
             $lanc->fluxo_id = $dados->fluxo_id;

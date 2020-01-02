@@ -20,8 +20,13 @@ class LancamentoController extends Controller
         if ($request->filled('valor'))     $dados->where('valor', 'like', '%' . $request->valor . '%');
         if ($request->filled('descricao')) $dados->where('descricao', 'like', '%' . $request->descricao . '%');
         if ($request->filled('titulo'))    $dados->where('titulo_id', 'like', '%' . $request->titulo . '%');
+      
+        // if ($request->filled('datainicio', 'datafinal'))
+        // $dados->whereBetween('vencimento', [implode('-', array_reverse(explode('/', $request->datainicio))), implode('-', array_reverse(explode('/', $request->datafinal)))])->get();
+
+      
         if ($request->filled('datainicio','datafinal'))   
-         $dados->whereBetween('data_lancamento', [$request->datainicio, $request->datafinal])->get();
+         $dados->whereBetween('data_lancamento', [implode('-', array_reverse(explode('/', $request->datainicio))), implode('-', array_reverse(explode('/', $request->datafinal)))])->get();
 
         $dados = $dados->with(['conta', 'fluxo','titulo'])->orderBy('data_lancamento','desc')->get();
 
