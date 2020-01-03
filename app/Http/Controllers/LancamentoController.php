@@ -15,23 +15,19 @@ class LancamentoController extends Controller
     {
         $dados = $lancamento->newQuery();
         if ($request->filled('descricao')) $dados->where('descricao', 'like', '%' . $request->descricao . '%');
-        if ($request->filled('conta_id'))  $dados->where('conta_id', 'like', '%' . $request->conta_id . '%');
-        if ($request->filled('fluxo_id'))  $dados->where('fluxo_id', 'like', '%' . $request->fluxo_id . '%');
+        if ($request->filled('conta_id'))  $dados->whereIn('conta_id', $request->conta_id);
+        if ($request->filled('fluxo_id'))  $dados->whereIn('fluxo_id', $request->fluxo_id);
         if ($request->filled('valor'))     $dados->where('valor', 'like', '%' . $request->valor . '%');
         if ($request->filled('descricao')) $dados->where('descricao', 'like', '%' . $request->descricao . '%');
         if ($request->filled('titulo'))    $dados->where('titulo_id', 'like', '%' . $request->titulo . '%');
-      
-        // if ($request->filled('datainicio', 'datafinal'))
-        // $dados->whereBetween('vencimento', [implode('-', array_reverse(explode('/', $request->datainicio))), implode('-', array_reverse(explode('/', $request->datafinal)))])->get();
 
-      
-        if ($request->filled('datainicio','datafinal'))   
-         $dados->whereBetween('data_lancamento', [implode('-', array_reverse(explode('/', $request->datainicio))), implode('-', array_reverse(explode('/', $request->datafinal)))])->get();
 
-        $dados = $dados->with(['conta', 'fluxo','titulo'])->orderBy('data_lancamento','desc')->get();
+        if ($request->filled('datainicio', 'datafinal'))
+            $dados->whereBetween('data_lancamento', [implode('-', array_reverse(explode('/', $request->datainicio))), implode('-', array_reverse(explode('/', $request->datafinal)))])->get();
 
-       
-        
+        $dados = $dados->with(['conta', 'fluxo', 'titulo'])->orderBy('data_lancamento', 'desc')->get();
+
+
         return response()->json($dados, 200);
     }
 
@@ -82,11 +78,10 @@ class LancamentoController extends Controller
             if (empty($dados)) {
                 return response('registro nao encontrado.', 200);
             }
-            $dados->delete();           
+            $dados->delete();
             return response()->json(['Dados excluidos', 'DADOS' => $dados], 200);
         } catch (Exception $e) {
             return response('Erro:' . $e->getMessage(), 500);
         }
-     
     }
 }

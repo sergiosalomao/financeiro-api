@@ -13,7 +13,7 @@ class TituloController extends Controller
 
     public function index(Request $request, Titulo $titulo)
     {
-        dd($request->fluxo_id);
+        
         $dados = $titulo->newQuery();
         
         if ($request->filled('tipo'))  $dados->where('tipo', '=', $request->tipo);
