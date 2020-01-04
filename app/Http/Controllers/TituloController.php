@@ -13,27 +13,23 @@ class TituloController extends Controller
 
     public function index(Request $request, Titulo $titulo)
     {
+        
         $dados = $titulo->newQuery();
-        if ($request->filled('informacoes')) {
-            $dados = $dados->get();
-            return $this->getInformacoes($dados);
-        }
-
-
-        $dados = $titulo->newQuery();
-
+        
+        if ($request->filled('tipo'))  $dados->where('tipo', '=', $request->tipo);
         if ($request->filled('status'))  $dados->where('status', 'like', '%' . $request->status . '%');
         if ($request->filled('conta_id'))  $dados->where('conta_id', 'like', '%' . $request->conta_id . '%');
-        if ($request->filled('fluxo_id'))  $dados->where('fluxo_id', 'like', '%' . $request->fluxo_id . '%');
+        if ($request->filled('fluxo_id'))  $dados->where('fluxo_id', '=',$request->fluxo_id);
         if ($request->filled('cedente_id'))  $dados->where('cedente_id', 'like', '%' . $request->cedente_id . '%');
         if ($request->filled('valor'))     $dados->where('valor', 'like', '%' . $request->valor . '%');
 
+       
         if ($request->filled('datainicio', 'datafinal'))
             $dados->whereBetween('vencimento', [implode('-', array_reverse(explode('/', $request->datainicio))), implode('-', array_reverse(explode('/', $request->datafinal)))])->get();
 
         $dados = $dados->with(['conta', 'fluxo', 'cedente'])->orderBy('vencimento', 'asc')->get();
-
-        return response()->json($dados, 200);
+        
+        return response()->json(["dados" => $dados, "total" => $this->getInformacoes($dados)], 200);
     }
 
 
@@ -121,8 +117,6 @@ class TituloController extends Controller
     }
     public function getInformacoes($dados)
     {
-
-
 
         $total['totalPago'] = 0;
         $total['totalApagar'] = 0;
