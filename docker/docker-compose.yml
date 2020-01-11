@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  apache2:
+     image: salomaoleite/apache-php7.2-mysql5.7
+     restart: always
+     container_name: apache-php7.2-mysql5.7-financeiro
+     volumes:
+        - /var/www/html:/var/www/html
+     ports:
+       - 9000:80
+     stdin_open: true
+     tty: true
+
+  postgres:
+    image: salomaoleite/postgresql
+    restart: always
+    environment:
+      POSTGRES_USER: "postgres"      
+      POSTGRES_PASSWORD: "210981"
+    ports:
+      - "5432:5432"
+    volumes:
+      - /home/servidor/PostgreSQL:/var/lib/postgresql/data 
+    networks:
+      - rede_docker
+
+  pgadmin:
+    image: salomaoleite/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "salomao.leite@hotmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "210981"
+    ports:
+      - "9001:80"
+    depends_on:
+      - postgres
+    networks:
+      - rede_docker
+
+networks: 
+  rede_docker:

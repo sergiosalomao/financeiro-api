@@ -14,6 +14,7 @@ class LancamentoController extends Controller
     public function index(Request $request, Lancamento $lancamento)
     {
         $dados = $lancamento->newQuery();
+        if ($request->filled('tipo'))  $dados->whereIn('tipo',  $request->tipo);
         if ($request->filled('descricao')) $dados->where('descricao', 'like', '%' . $request->descricao . '%');
         if ($request->filled('conta_id'))  $dados->whereIn('conta_id', $request->conta_id);
         if ($request->filled('fluxo_id'))  $dados->whereIn('fluxo_id', $request->fluxo_id);

@@ -1,0 +1,4 @@
+porta usada no front 9002
+
+use
+php artisan serve --port=192.168.0.100 --port=9002

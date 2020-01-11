@@ -16,7 +16,7 @@ class TituloController extends Controller
         
         $dados = $titulo->newQuery();
         
-        if ($request->filled('tipo'))  $dados->where('tipo', '=', $request->tipo);
+        if ($request->filled('tipo'))  $dados->whereIn('tipo',  $request->tipo);
         if ($request->filled('status'))  $dados->where('status', 'like', '%' . $request->status . '%');
         if ($request->filled('conta_id'))  $dados->where('conta_id', 'like', '%' . $request->conta_id . '%');
         if ($request->filled('fluxo_id'))  $dados->where('fluxo_id', '=',$request->fluxo_id);

@@ -1,0 +1,10 @@
+instalacao
+sudo docker-compose up -d
+
+localhost:9000 abre apache
+localhost:9001 pgadmin
+
+pra criar o servidor no pgadmin, definir o ip da maquina 192.168.0.100 (servidor)
+user postgres
+senha 210981
+
